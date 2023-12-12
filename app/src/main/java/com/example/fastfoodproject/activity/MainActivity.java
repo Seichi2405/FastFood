@@ -1,4 +1,4 @@
-package com.example.fastfoodproject;
+package com.example.fastfoodproject.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,15 +7,22 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.example.fastfoodproject.R;
+import com.example.fastfoodproject.adapter.LoaiSpAdapter;
+import com.example.fastfoodproject.model.LoaiSp;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -29,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewMain;
     DrawerLayout drawerLayout;
 
+    LoaiSpAdapter loaiSpAdapter;
+
+    List<LoaiSp> manngloaisp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         Anhxa();
         ActionBar();
         ActionViewFlipper();
+        if(isConnected(this)){
+            Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "khong co Internet", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void Anhxa(){
@@ -45,6 +61,22 @@ public class MainActivity extends AppCompatActivity {
         listViewMain = findViewById(R.id.listviewMain);
         navigationView = findViewById(R.id.navigationview);
         drawerLayout = findViewById(R.id.drawerLayout);
+        //tao list
+        manngloaisp = new ArrayList<>();
+        //tao adapter
+        loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), manngloaisp);
+        listViewMain.setAdapter(loaiSpAdapter);
+    }
+
+    private  boolean isConnected (Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if((wifi != null && wifi.isConnected()) || (mobile != null && mobile.isConnected())){
+            return true;
+        }else{
+            return false;
+        }
     }
     private void ActionViewFlipper(){
         List<String> mangquangcao = new ArrayList<>();

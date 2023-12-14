@@ -1,6 +1,6 @@
 package com.example.fastfoodproject.model;
 
-public class LoaiSp {
+public class LoaiMonan {
     int id;
     String tensanpham;
     String hinhanh;

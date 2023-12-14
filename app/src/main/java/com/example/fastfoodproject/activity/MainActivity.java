@@ -1,6 +1,5 @@
 package com.example.fastfoodproject.activity;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -21,12 +20,20 @@ import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.example.fastfoodproject.R;
-import com.example.fastfoodproject.adapter.LoaiSpAdapter;
-import com.example.fastfoodproject.model.LoaiSp;
+import com.example.fastfoodproject.adapter.LoaiMonanAdapter;
+import com.example.fastfoodproject.model.LoaiMonan;
+import com.example.fastfoodproject.model.LoaiMonanModel;
+import com.example.fastfoodproject.retrofit.ApiFastFood;
+import com.example.fastfoodproject.retrofit.RetrofitClient;
+import com.example.fastfoodproject.utils.Utils;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -36,23 +43,34 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewMain;
     DrawerLayout drawerLayout;
 
-    LoaiSpAdapter loaiSpAdapter;
+    LoaiMonanAdapter loaiMonanAdapter;
 
-    List<LoaiSp> manngloaisp;
+    List<LoaiMonan> mangloaisp;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    ApiFastFood apiFastFood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        apiFastFood = RetrofitClient.getInstance(Utils.BASE_URL).create(ApiFastFood.class);
+
         Anhxa();
         ActionBar();
-        ActionViewFlipper();
+
         if(isConnected(this)){
             Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_LONG).show();
+            ActionViewFlipper();
+            getLoaiMonan();
         }else{
             Toast.makeText(getApplicationContext(), "khong co Internet", Toast.LENGTH_LONG).show();
         }
     }
+
+    private void getLoaiMonan() {
+
+    }
+
 
     private void Anhxa(){
         toolbar = findViewById(R.id.toolbarMain);
@@ -62,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigationview);
         drawerLayout = findViewById(R.id.drawerLayout);
         //tao list
-        manngloaisp = new ArrayList<>();
+        mangloaisp = new ArrayList<>();
         //tao adapter
-        loaiSpAdapter = new LoaiSpAdapter(getApplicationContext(), manngloaisp);
-        listViewMain.setAdapter(loaiSpAdapter);
+        loaiMonanAdapter = new LoaiMonanAdapter(getApplicationContext(), mangloaisp);
+        listViewMain.setAdapter(loaiMonanAdapter);
     }
 
     private  boolean isConnected (Context context){

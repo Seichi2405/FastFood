@@ -10,16 +10,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fastfoodproject.R;
-import com.example.fastfoodproject.model.LoaiSp;
+import com.example.fastfoodproject.model.LoaiMonan;
 
 import java.util.List;
 
-public class LoaiSpAdapter extends BaseAdapter {
+public class LoaiMonanAdapter extends BaseAdapter {
 
-    List<LoaiSp> array;
+    List<LoaiMonan> array;
     Context context;
 
-    public LoaiSpAdapter( Context context, List<LoaiSp> array) {
+    public LoaiMonanAdapter(Context context, List<LoaiMonan> array) {
         this.array = array;
         this.context = context;
     }
